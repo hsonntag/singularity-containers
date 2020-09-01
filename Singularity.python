@@ -1,0 +1,33 @@
+Bootstrap: library
+From: ubuntu:18.04
+Stage: build
+
+%setup
+    mkdir ${SINGULARITY_ROOTFS}/root/.emacs.d/
+
+%files
+    
+#COPY init.el /root/.emacs.d/init.el
+
+%environment
+VIRTUAL_ENV=/opt/venv
+PATH="$VIRTUAL_ENV/bin:$PATH"
+
+%post
+apt-get update && \
+apt-get upgrade -y
+apt-get install -y --no-install-recommends openssh-server tmux \
+    emacs emacs-goodies.el curl git \
+    python3 python3-pip python3-virtualenv python3-dev build-essential
+
+# My own installs
+apt-get install -y --no-install-recommends vim texlive-latex-extra texlive-plain-generic libxxf86vm1
+
+python3 -m virtualenv --python=/usr/bin/python3 $VIRTUAL_ENV
+pip install --upgrade pip setuptools wheel && \
+pip install numpy gensim matplotlib pyyaml matplotlib-venn jupyter && \
+pip install elpy jedi rope yapf importmagic flake8 autopep8 black && \
+pip install sympy orthopy && \
+pip install sphinx sphinx-gallery
+# Skipping: tensorflow scikit-learn 
+
