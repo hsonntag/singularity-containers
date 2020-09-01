@@ -1,6 +1,5 @@
-Bootstrap: library
+Bootstrap: docker
 From: ubuntu:18.04
-Stage: build
 
 %setup
     mkdir ${SINGULARITY_ROOTFS}/root/.emacs.d/
